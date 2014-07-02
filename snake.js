@@ -28,10 +28,8 @@ var snake = (function(){
         var $block, $row, i, $board = $("#snakeBoard");
 
         $block = $("<div/>").css({
-            float:"left",
             height: parseInt($board.css("height"))/numRows-2 + "px",
-            width: parseInt($board.css("width"))/numColumns-2 + "px",
-            border:"1px red solid"
+            width: parseInt($board.css("width"))/numColumns-2 + "px"
         }).addClass("block");
 
         $row = $("<div/>").addClass("row");
@@ -40,7 +38,7 @@ var snake = (function(){
             $row.append($block.clone());
         }
 
-        $row.append($("<div/>").css("clear","both"));
+        $row.append($("<div/>"));
         for(i=0; i<numRows; i++){
             $board.append($row.clone());
         }
@@ -52,7 +50,7 @@ var snake = (function(){
     }
 
     function paintBox(x,y){
-        $(".row").eq(y).find(".block").eq(x).css("background","red");
+        $(".row").eq(y).find(".block").eq(x).addClass("snakeBody");
     }
 
     return {
@@ -62,13 +60,5 @@ var snake = (function(){
 })();
 
 $(function(){
-    var $board = $("#snakeBoard");
-    $board.css({
-        width:"700px",
-        height:"700px",
-        border:"1px black solid",
-        margin:"10px auto"
-    });
-
     snake.init(20,20);
 });
