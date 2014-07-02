@@ -1,10 +1,12 @@
 var snake = (function(){
-    var currX, currY, gridRows, gridColumns;
+    var currX, currY, currDirection, gridRows, gridColumns, animationID, lastStep;
 
-    const DOWN_ARROW = 40;
-    const UP_ARROW = 38;
     const LEFT_ARROW = 37;
+    const UP_ARROW = 38;
     const RIGHT_ARROW = 39;
+    const DOWN_ARROW = 40;
+
+    const speed = 500;
 
     function init(numRows,numColumns){
         //Wire up handlers
@@ -18,10 +20,12 @@ var snake = (function(){
         //Set Starting position
         currX = Math.floor(numColumns / 2);
         currY = Math.floor(numRows / 2);
+        currDirection = UP_ARROW;
 
         paintBox(currX,currY);
 
         //Start game loop
+        animationID = requestAnimationFrame(gameLoop);
     }
 
     function makeGrid(numRows,numColumns){
@@ -44,8 +48,25 @@ var snake = (function(){
         }
     }
 
+    function gameLoop(ts){
+        if (lastStep === undefined) lastStep = ts;
+
+        if(ts - lastStep > speed){
+            //todo do move
+            lastStep = ts;
+        }
+
+        animationID = requestAnimationFrame(gameLoop);
+    }
+
     function handleKeyDown(e){
-//        console.log(e.which);
+        var keyPressed = e.which;
+
+        //Don't change direction if its the current direction or if its the direct opposite
+        if(currDirection % 2 !== keyPressed % 2){
+            currDirection = keyPressed;
+        }
+
         return false;
     }
 
