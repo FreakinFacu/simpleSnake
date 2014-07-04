@@ -6,7 +6,7 @@ var snake = (function(){
     const RIGHT_ARROW = 39;
     const DOWN_ARROW = 40;
 
-    const speed = 500;
+    const speed = 50;
 
     function init(numRows,numColumns){
         //Wire up handlers
@@ -32,8 +32,8 @@ var snake = (function(){
         var $block, $row, i, $board = $("#snakeBoard");
 
         $block = $("<div/>").css({
-            height: parseInt($board.css("height"))/numRows-2 + "px",
-            width: parseInt($board.css("width"))/numColumns-2 + "px"
+            height: parseInt($board.css("height"))/numRows + "px",
+            width: parseInt($board.css("width"))/numColumns  + "px"
         }).addClass("block");
 
         $row = $("<div/>").addClass("row");
@@ -52,11 +52,41 @@ var snake = (function(){
         if (lastStep === undefined) lastStep = ts;
 
         if(ts - lastStep > speed){
-            //todo do move
             lastStep = ts;
+
+            if(!growSnake()){
+                alert("GAME OVER");
+                return; //game over
+            }
         }
 
         animationID = requestAnimationFrame(gameLoop);
+    }
+
+    function growSnake(){
+        switch(currDirection){
+            case UP_ARROW:
+                currY--;
+                if(currY < 0) return false;
+                break;
+
+            case DOWN_ARROW:
+                currY++;
+                if(currY >= gridRows) return false;
+                break;
+
+            case LEFT_ARROW:
+                currX--;
+                if(currX < 0) return false;
+                break;
+
+            case RIGHT_ARROW:
+                currX++;
+                if(currX >= gridColumns) return false;
+                break;
+        }
+
+        return paintBox(currX,currY);
     }
 
     function handleKeyDown(e){
@@ -71,7 +101,12 @@ var snake = (function(){
     }
 
     function paintBox(x,y){
-        $(".row").eq(y).find(".block").eq(x).addClass("snakeBody");
+        var $box = $(".row").eq(y).find(".block").eq(x);//.addClass("snakeBody");
+
+        if($box.hasClass("snakeBody")) return false;
+
+        $box.addClass("snakeBody");
+        return true;
     }
 
     return {
@@ -81,5 +116,5 @@ var snake = (function(){
 })();
 
 $(function(){
-    snake.init(20,20);
+    snake.init(50,50);
 });
