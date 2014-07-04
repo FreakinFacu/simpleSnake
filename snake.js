@@ -93,11 +93,11 @@ var snake = (function(){
         var keyPressed = e.which;
 
         //Don't change direction if its the current direction or if its the direct opposite
-        if(currDirection % 2 !== keyPressed % 2){
+        if(keyPressed >= LEFT_ARROW && keyPressed <= DOWN_ARROW && currDirection % 2 !== keyPressed % 2){
             currDirection = keyPressed;
+            return false;
         }
-
-        return false;
+        return true;
     }
 
     function paintBox(x,y){
