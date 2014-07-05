@@ -1,12 +1,15 @@
 var snake = (function(){
-    var currX, currY, currDirection, gridRows, gridColumns, animationID, lastStep;
+    var currX, currY, currDirection, gridRows, gridColumns, animationID, lastStep,
+        currScore = 0;
 
     const LEFT_ARROW = 37;
     const UP_ARROW = 38;
     const RIGHT_ARROW = 39;
     const DOWN_ARROW = 40;
 
-    const speed = 50;
+    const ENTER_KEY = 13;
+
+    const speed = 30;
 
     function init(numRows,numColumns){
         //Wire up handlers
@@ -58,6 +61,8 @@ var snake = (function(){
                 alert("GAME OVER");
                 return; //game over
             }
+            currScore++;
+            $("#scoreDisplay").text(currScore);
         }
 
         animationID = requestAnimationFrame(gameLoop);
@@ -101,7 +106,7 @@ var snake = (function(){
     }
 
     function paintBox(x,y){
-        var $box = $(".row").eq(y).find(".block").eq(x);//.addClass("snakeBody");
+        var $box = $(".row").eq(y).find(".block").eq(x);
 
         if($box.hasClass("snakeBody")) return false;
 
