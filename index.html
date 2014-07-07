@@ -27,6 +27,18 @@
             text-align: center;
         }
 
+        h2.left{
+            display: inline-block;
+            width: 400px;
+        }
+
+        em.right{
+            display: inline-block;
+            width: 375px;
+            margin-left: 100px;
+            text-align: center;
+        }
+
         .container{
             width: 640px;
             margin: 0 auto;
@@ -67,7 +79,8 @@
 
 <div class="container">
     <h1>Super Snake Game</h1>
-    <h2><a id="name" href="#"></a> Score <span id="scoreDisplay">0</span></h2>
+    <h2 class="left"><a id="name" href="#"></a> Score <span id="scoreDisplay">0</span></h2>
+    <em class="right">Use arrow keys to change direction. On mobile device swipe to the direction you would like to change to.</em>
 
     <div id="snakeBoard"></div>
 
