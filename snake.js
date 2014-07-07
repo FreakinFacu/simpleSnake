@@ -87,6 +87,7 @@ var snake = (function(){
             lastStep = ts;
 
             if(!growSnake()){
+                cancelAnimationFrame(animationID);
                 gameOver();
                 return; //game over
             }
@@ -106,6 +107,9 @@ var snake = (function(){
             name:"Facu",
             score: currScore
         });
+
+        scores.sort(function(a,b){ return b.score - a.score});
+        scores = scores.slice(0,10);
 
         localStorage.setItem(LS_KEY, JSON.stringify(scores));
 
