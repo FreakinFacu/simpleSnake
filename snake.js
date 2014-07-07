@@ -15,6 +15,7 @@ var snake = (function(){
     function init(numRows,numColumns){
         //Wire up handlers
         $(document).on("keydown",handleKeyDown);
+        $(document).on("touchstart",handleTouch);
 
         //Create Grid
         gridRows = numRows;
@@ -157,6 +158,14 @@ var snake = (function(){
         }
 
         return true;
+    }
+
+    function handleTouch(e){
+        var touch = e.touches[0];
+        $("#tX").text(touch.pageX);
+        $("#tY").text(touch.pageY);
+
+        return false;
     }
 
     function paintBox(x,y){
