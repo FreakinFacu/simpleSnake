@@ -1,6 +1,5 @@
 var snake = (function(){
-    var currX, currY, currDirection, gridRows, gridColumns, animationID, lastStep,
-        currScore = 0;
+    var currX, currY, currDirection, gridRows, gridColumns, animationID, lastStep, currScore, isGameOver;
 
     const LEFT_ARROW = 37;
     const UP_ARROW = 38;
@@ -11,6 +10,8 @@ var snake = (function(){
 
     const speed = 30;
 
+    const LS_KEY = "snakeHighScores";
+
     function init(numRows,numColumns){
         //Wire up handlers
         $(document).on("keydown",handleKeyDown);
@@ -19,16 +20,26 @@ var snake = (function(){
         gridRows = numRows;
         gridColumns = numColumns;
         makeGrid(numRows,numColumns);
+        buildHighScore();
+        isGameOver = true;
+    }
+
+    function start(){
+        $("h1").text("Super Snake Game").css("color","black");
+        $(".snakeBody").removeClass("snakeBody");
+
+        currScore = 0;
 
         //Set Starting position
-        currX = Math.floor(numColumns / 2);
-        currY = Math.floor(numRows / 2);
+        currX = Math.floor(gridColumns / 2);
+        currY = Math.floor(gridRows / 2);
         currDirection = UP_ARROW;
 
         paintBox(currX,currY);
 
         //Start game loop
         animationID = requestAnimationFrame(gameLoop);
+        isGameOver = false;
     }
 
     function makeGrid(numRows,numColumns){
@@ -51,6 +62,24 @@ var snake = (function(){
         }
     }
 
+    function buildHighScore(){
+        var scores = JSON.parse(localStorage.getItem(LS_KEY)),
+            $list = $("#highScores").find("ol"),
+            temp;
+
+        $list.html(" ");
+
+        if(scores === null){
+            scores = [];
+            localStorage.setItem(LS_KEY, JSON.stringify(scores));
+        }
+
+        $.each(scores,function(idx, val){
+            temp = $("<li/>").text(val.name + " - " + val.score);
+            $list.append(temp);
+        });
+    }
+
     function gameLoop(ts){
         if (lastStep === undefined) lastStep = ts;
 
@@ -58,7 +87,7 @@ var snake = (function(){
             lastStep = ts;
 
             if(!growSnake()){
-                alert("GAME OVER");
+                gameOver();
                 return; //game over
             }
             currScore++;
@@ -66,6 +95,22 @@ var snake = (function(){
         }
 
         animationID = requestAnimationFrame(gameLoop);
+    }
+
+    function gameOver(){
+        var scores = JSON.parse(localStorage.getItem(LS_KEY));
+
+        $("h1").text("GAME OVER").css("color","red");
+
+        scores.push({
+            name:"Facu",
+            score: currScore
+        });
+
+        localStorage.setItem(LS_KEY, JSON.stringify(scores));
+
+        buildHighScore();
+        isGameOver = true;
     }
 
     function growSnake(){
@@ -102,6 +147,11 @@ var snake = (function(){
             currDirection = keyPressed;
             return false;
         }
+
+        if(keyPressed == ENTER_KEY && isGameOver){
+            start();
+        }
+
         return true;
     }
 
@@ -116,10 +166,16 @@ var snake = (function(){
 
     return {
         init: init,
-        paintBox: paintBox
+        paintBox: paintBox,
+        start: start
     }
 })();
 
 $(function(){
     snake.init(50,50);
+
+    $(".start").click(function(){
+        snake.start();
+        return false;
+    });
 });
