@@ -3,7 +3,7 @@
 <head>
     <title></title>
     <script src="jquery-1.11.0.js"></script>
-    <script src="snake.js"></script>
+    <script src="snake.js?version=2"></script>
 
     <style>
         .snakeBody{
@@ -67,7 +67,7 @@
 
 <div class="container">
     <h1>Super Snake Game</h1>
-    <h2>Score <span id="scoreDisplay">0</span></h2>
+    <h2><a id="name" href="#"></a> Score <span id="scoreDisplay">0</span></h2>
 
     <div id="snakeBoard"></div>
 
@@ -80,8 +80,6 @@
     <div style="clear: both"></div>
 
     <button class="start">Start</button> <em>You can also use the 'Enter' key.</em>
-
-    <h2>Touched: <span id="tX"></span> <span id="tY"></span></h2>
 </div>
 
 </body>

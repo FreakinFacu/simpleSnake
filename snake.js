@@ -1,5 +1,8 @@
 var snake = (function(){
-    var currX, currY, currDirection, gridRows, gridColumns, animationID, lastStep, currScore, isGameOver;
+    var currX, currY, currDirection, gridRows, gridColumns, animationID, lastStep, currScore, isGameOver,
+        currName = "";
+
+    var isTouch, startX, startY;
 
     const LEFT_ARROW = 37;
     const UP_ARROW = 38;
@@ -15,7 +18,14 @@ var snake = (function(){
     function init(numRows,numColumns){
         //Wire up handlers
         $(document).on("keydown",handleKeyDown);
-        $(document).on("touchstart",handleTouch);
+        $(document).on("touchstart",handleTouchStart);
+        $(document).on("touchend",handleTouchEnd);
+        $(document).on("touchmove",handleTouchMove);
+        $("#name").on("click",function(){
+            currName = prompt("Change Name",currName);
+            $("#name").text(currName+"'s");
+            return false;
+        });
 
         //Create Grid
         gridRows = numRows;
@@ -104,8 +114,13 @@ var snake = (function(){
 
         $("h1").text("GAME OVER").css("color","red");
 
+        if(currName == ""){
+            currName = prompt("Enter Name");
+            $("#name").text(currName+"'s");
+        }
+
         scores.push({
-            name:"Facu",
+            name:currName,
             score: currScore
         });
 
@@ -155,17 +170,51 @@ var snake = (function(){
 
         if(keyPressed == ENTER_KEY && isGameOver){
             start();
+            return false;
         }
 
         return true;
     }
 
-    function handleTouch(e){
-        var touch = e.touches[0];
+    function handleTouchStart(e){
+        windowE = e;
+        var touch = e.originalEvent.touches[0];
         $("#tX").text(touch.pageX);
         $("#tY").text(touch.pageY);
 
-        return false;
+        isTouch = true;
+        startX = touch.pageX;
+        startY = touch.pageY;
+    }
+
+    function handleTouchEnd(e){
+        isTouch = false;
+    }
+
+    function handleTouchMove(e){
+        if(isTouch){
+            var touch = e.originalEvent.touches[0],
+                xDiff = touch.pageX - startX,
+                yDiff = touch.pageY - startY;
+
+            if(currDirection == LEFT_ARROW || currDirection == RIGHT_ARROW){
+                if(yDiff > 30){
+                    currDirection = DOWN_ARROW;
+                    isTouch = false;
+                }else if(yDiff < -30){
+                    currDirection = UP_ARROW;
+                    isTouch = false;
+                }
+            }else{
+                if(xDiff > 30){
+                    currDirection = RIGHT_ARROW;
+                    isTouch = false;
+                }else if(xDiff < -30){
+                    currDirection = LEFT_ARROW;
+                    isTouch = false;
+                }
+            }
+        }
     }
 
     function paintBox(x,y){
