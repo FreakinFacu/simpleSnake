@@ -20,7 +20,7 @@
             width: 600px;
             height: 600px;
             border: 1px black solid;
-            margin: 10px auto;
+            margin: 0 auto;
         }
 
         h1{
@@ -30,6 +30,26 @@
             width: 640px;
             margin: 0 auto;
         }
+
+        #highScores{
+            border: 1px solid black;
+            height: 200px;
+            width: 250px;
+        }
+
+        @media only screen and (min-width: 800px) {
+            .container{
+                width: 900px;
+            }
+
+            #highScores{
+                float: left;
+            }
+
+            #snakeBoard{
+                float: left;
+            }
+        }
     </style>
 </head>
 <body>
@@ -37,9 +57,10 @@
 <div class="container">
     <h1>Super Snake Game</h1>
     <h2>Score <span id="scoreDisplay">0</span></h2>
-    <div id="snakeBoard">
-</div>
 
+    <div id="snakeBoard"></div>
+
+    <div id="highScores"></div>
 </div>
 
 </body>
